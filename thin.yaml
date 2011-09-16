@@ -1,8 +1,10 @@
 ---
-timeout: 30
+pid: tmp/pids/thin.pid
 log: log/thin.log
+max_conns: 1024
+timeout: 30
 environment: production
 servers: 1
-daemonize: true
 rackup: config.ru
 port: 3001
+daemonize: true

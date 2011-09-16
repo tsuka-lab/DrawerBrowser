@@ -26,14 +26,14 @@ get '/thumb/:size/:filename' do
   thumb =     File.join thumb_dir, params[:filename]
   FileUtils.mkdir_p(thumb_dir) unless File.exists?(thumb_dir)
   unless File.exists? thumb
+    #puts "--- create thumb #{params[:filename]} ---"
     sizeToPixel = {'middle' => 200, 'small' => 50}
-    p sizeToPixel[params[:size]]
     pixel = sizeToPixel[params[:size]]
     Pikl::Image.open(original) do |img|
       img.fit(pixel, pixel).save(thumb, :jpeg)
     end
   end
-  File.open(thumb, 'rb')
+  send_file thumb
 end
 
 get '/assets/*' do

@@ -2,6 +2,7 @@ source :rubygems
 
 gem 'sinatra', '>= 1.0'
 gem 'sinatra-content-for', :require => 'sinatra/content_for'
+gem 'rack-static-if-present'
 gem 'haml'
 
 ### json or json_pure

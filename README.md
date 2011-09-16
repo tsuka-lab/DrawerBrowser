@@ -2,6 +2,8 @@
 
 ## Install
 
+### Install Ruby and RubyGems
+
 ### Install pikl
 
 <http://pikl.rubyforge.org/>
@@ -16,8 +18,6 @@ Require:
 - libpng-dev
 
 Comment out /usr/include/pngconf.h: Line 371, 372
-
-### Install RubyGems
 
 ### Install Bundler (>= 1.0)
 
@@ -34,6 +34,12 @@ Modify "Gemfile" when you install on Windows.
 
     $ bundle update
 
+## Settings
+
+environment.rb
+
+    set :drawer_image_dir, "PATH/TO/IMAGES"
+
 ## Usage
 
 Webrick:
@@ -47,6 +53,11 @@ Rackup:
 Thin:
 
     $ thin start
+
+Thin (production):
+
+    $ thin start -C thin.yaml
+    $ thin stop  -C thin.yaml
 
 ## Reference
 
