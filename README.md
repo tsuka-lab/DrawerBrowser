@@ -28,8 +28,6 @@ Comment out /usr/include/pngconf.h: 371, 372
     $ cd MY/APP
     $ bundle install --path vendor/bundle
 
-### Install CoffeeScript
-
 ## Update gems
 
     $ bundle update
