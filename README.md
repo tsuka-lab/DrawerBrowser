@@ -9,10 +9,11 @@
 #### Install on Linux
 
 Require:
-* libjpeg
-* libjpeg-dev
-* libpng
-* libpng-dev
+
+- libjpeg
+- libjpeg-dev
+- libpng
+- libpng-dev
 
 Comment out /usr/include/pngconf.h: 371, 372
 
