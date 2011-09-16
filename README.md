@@ -1,10 +1,8 @@
-# My Sinatra Template
-
-Based on Sinatra and Haml.
+# DrawerBrowser
 
 ## Install
 
-0: pre install
+### Install pikl
 
 <http://pikl.rubyforge.org/>
 
@@ -18,20 +16,20 @@ Require:
 
 Comment out /usr/include/pngconf.h: 371, 372
 
-1: Install RubyGems
+### Install RubyGems
 
-2: Install Bundler (>= 1.0)
+### Install Bundler (>= 1.0)
 
     $ sudo gem install bundler
 
-3: Install gems
+### Install gems
 
     $ cd MY/APP
     $ bundle install --path vendor/bundle
 
-4: Install CoffeeScript
+### Install CoffeeScript
 
-### Update gems
+## Update gems
 
     $ bundle update
 
