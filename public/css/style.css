@@ -102,6 +102,10 @@ div.day-container div.time {
   color: #333;
 }
 
+td.sequence-container {
+  min-width: 200px;
+}
+
 table.sequence {
   margin-right: 10px;
 }

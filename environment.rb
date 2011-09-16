@@ -1,12 +1,12 @@
 configure do
-  SiteConfig = OpenStruct.new(:title => 'DrawerViewer')
+  set :site_title, "DrawerBrowser"
+  set :drawer_images_dir, "/home/kambara/Desktop/drawer-images"
 
   set :haml, {:format => :html5}
   set :views, File.dirname(__FILE__) + '/app/views'
-
-  root = File.expand_path('../', __FILE__)
-  set :sprockets, Sprockets::Environment.new(root)
-  Sinatra::Application.sprockets.append_path File.join(root, 'assets')
+  set :root, File.expand_path('../', __FILE__)
+  set :sprockets, Sprockets::Environment.new(settings.root)
+  settings.sprockets.append_path File.join(settings.root, 'assets')
 end
 
 configure :production do

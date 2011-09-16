@@ -11,7 +11,7 @@ end
 get '/images.json' do
   content_type :json
   images = []
-  Dir::chdir('public/drawer-images') {
+  Dir::chdir(settings.drawer_images_dir) {
     images = Dir::glob('*.jpg').map {|filename|
       {:filename => filename}
     }
@@ -21,9 +21,9 @@ end
 
 get '/thumb/:size/:filename' do
   content_type :jpeg
-  original = "public/drawer-images/#{params[:filename]}"
-  thumb_dir = "tmp/thumb/#{params[:size]}"
-  thumb = "#{thumb_dir}/#{params[:filename]}"
+  original =  File.join settings.drawer_images_dir, params[:filename]
+  thumb_dir = File.join "tmp/thumb/", params[:size]
+  thumb =     File.join thumb_dir, params[:filename]
   FileUtils.mkdir_p(thumb_dir) unless File.exists?(thumb_dir)
   unless File.exists? thumb
     sizeToPixel = {'middle' => 200, 'small' => 50}

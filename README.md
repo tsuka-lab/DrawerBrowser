@@ -25,6 +25,8 @@ Comment out /usr/include/pngconf.h: Line 371, 372
 
 ### Install gems
 
+Modify "Gemfile" when you install on Windows.
+
     $ cd DrawerBrowser
     $ bundle install --path vendor/bundle
 

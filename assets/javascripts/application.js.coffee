@@ -306,28 +306,29 @@ class SequenceView extends Backbone.View
   imageRendered: false
 
   initialize: ->
-    @render()
+    $(@el).attr('id', "sequence#{ @model.get('id') }").addClass('sequence-container')
     setTimeout(() =>
       $(window).bind('scroll', @lazyRender).triggerHandler('scroll')
-    , 100)
+    , 300)
 
-  lazyRender: () =>
-    seqLeft = $(@el).offset().left
+  isDisplayedInnerWindow: (elem) ->
+    elemLeft = $(elem).offset().left
     winLeft = $(window).scrollLeft()
     winRight = winLeft + $(window).width()
-    if winLeft-100 <= seqLeft <= winRight+100
-      @renderImage()
-      $(window).unbind('scroll', @lazyRender)
+    (winLeft-100 <= elemLeft <= winRight+100)
+
+  lazyRender: () =>
+    return unless @isDisplayedInnerWindow(@el)
+    @render()
+    $(window).unbind('scroll', @lazyRender)
 
   render: ->
     ## 時間表示
     date = @model.getDate()
-    $(@el).attr('id', "sequence#{ @model.get('id') }")
     $('<div/>').addClass('time').text(
       Util.dateToHoursMinString(date)
     ).appendTo(@el)
 
-  renderImage: ->
     table = $('<table/>').addClass('sequence').appendTo(@el)
     tr = $('<tr/>').appendTo(table)
 
@@ -417,31 +418,41 @@ class DayView extends Backbone.View
   makeLink: (seq) =>
     labelText = BoxIdLabel[seq.get('boxId')]
     timeLabel = $('<div>').addClass('time-label').text( Util.dateToHoursMinString(seq.getDate()) )
-    image = seq.getImagePairList().at(0).getInnerOrOuterImage()
-    img = $('<img/>').attr('src', image.getThumbSmallPath())
     boxLabel = $('<div/>').addClass('box-label').text(labelText)
-
     div = $('<div/>').addClass('box-link').attr('title', labelText)
     div.append(boxLabel)
     div.append(timeLabel)
-    div.append(img)
+
+    ## 画像をあとから追加
+    setTimeout(() =>
+      $(window).bind('scroll', {seq: seq, container: div}, @lazyAppendImage).triggerHandler('scroll')
+    , 600)
+
     div.click () ->
       appRouter.navigate "box/#{ seq.get('boxId') }/#{ seq.get('id') }", true
     div
 
-    # @model.getSequenceList().each (seq) =>
-    #   seqView = new SequenceView({model: seq})
-    #   tr.append(seqView.el)
+  lazyAppendImage: (args) =>
+    return unless @isDisplayedInnerWindow(@el)
+    @appendImage(args.data.seq, args.data.container)
+    $(window).unbind('scroll', @lazyAppendImage)
 
-  @months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  @days:   ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+  appendImage: (seq, container) ->
+    image = seq.getImagePairList().at(0).getInnerOrOuterImage()
+    img = $('<img/>').attr('src', image.getThumbSmallPath()).appendTo(container)
+
+  isDisplayedInnerWindow: (elem) ->
+    elemLeft = $(elem).offset().left
+    winLeft = $(window).scrollLeft()
+    winRight = winLeft + $(window).width()
+    (winLeft-100 <= elemLeft <= winRight+100)
 
   makeDateElem: ->
     date = @model.getDate()
     div = $('<div/>').addClass('date-label')
     
     $('<div/>').addClass('month').text(
-      DayView.months[date.getMonth()]
+      Util.months[date.getMonth()]
     ).appendTo(div)
     $('<span/>').addClass('date').text(
       date.getDate()
@@ -450,7 +461,7 @@ class DayView extends Backbone.View
       date.getFullYear()
     ).appendTo(div)
     $('<span/>').addClass('day').text(
-      "(#{DayView.days[date.getDay()]})"
+      "(#{Util.days[date.getDay()]})"
     ).appendTo(div)
     div
 
@@ -587,7 +598,11 @@ class AppView extends Backbone.View
     @el.html boxView.el
     if @targetSequenceId?
       seq = $('#sequence'+@targetSequenceId)
-      $(window).scrollLeft(seq.offset().left - 10) if seq
+      if seq.length
+        setTimeout(() =>
+          $(window).scrollLeft(seq.offset().left - 10)
+          #$("html,body").animate({scrollLeft: seq.offset().left - 10}, 300);
+        , 500)
 
   renderTabs: =>
     tabs = $('#tabs')
