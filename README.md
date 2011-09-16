@@ -15,7 +15,7 @@ Require:
 - libpng
 - libpng-dev
 
-Comment out /usr/include/pngconf.h: 371, 372
+Comment out /usr/include/pngconf.h: Line 371, 372
 
 ### Install RubyGems
 
@@ -25,7 +25,7 @@ Comment out /usr/include/pngconf.h: 371, 372
 
 ### Install gems
 
-    $ cd MY/APP
+    $ cd DrawerBrowser
     $ bundle install --path vendor/bundle
 
 ## Update gems
