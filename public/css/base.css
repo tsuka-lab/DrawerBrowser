@@ -1,0 +1,10 @@
+/* Align checkboxes, radios, text inputs with their label */
+input, select { vertical-align: middle; }
+
+/* Hand cursor on clickable input elements */
+label, input[type=button], input[type=submit], button { cursor: pointer; }
+
+/* Clearfix */
+.clearfix:before, .clearfix:after {  content: "\0020"; display: block; height: 0; visibility: hidden;	 } 
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }

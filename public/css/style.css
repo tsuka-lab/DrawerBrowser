@@ -1,0 +1,200 @@
+body {
+  margin: 0px;
+  background-color: black;
+  color: white;
+}
+
+tr, td {
+  padding: 0;
+  margin: 0;
+}
+
+td {
+  vertical-align: top;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/*
+ * Header
+ */
+
+#header {
+  background-color: #EEE;
+  color: #333;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 110px;
+}
+
+div#tabs {
+  margin-left: 10px;
+  padding: 0px 0; /* == span.tab{ padding-bottom } */
+  position: absolute;
+  top: 70px;
+  font-size: 80%;
+}
+div#tabs div.tab {
+  padding: 6px 6px;
+  cursor: pointer;
+  max-width: 70px;
+  height: 30px;
+  text-align: center;
+  float: left;
+  font-weight: bold;
+}
+div#tabs div.selected {
+  background-color: black;
+  color: white;
+}
+
+/*
+ * Box
+ */
+
+table.box {
+  margin-top: 130px;
+  margin-left: 60px;
+}
+
+/*
+ * Day
+ */
+
+div.day-container {
+  border-left: 3px solid #EEE;
+  padding-left: 10px;
+}
+
+div.day-container div.date-label {
+  padding-left: 0px;
+  padding-bottom: 10px;
+}
+div.day-container .year {
+  font-size: 80%;
+  color: #999;
+  margin-left: 0.8em;
+}
+div.day-container .month {
+  font-size: 110%;
+  margin-bottom: 0px;
+}
+div.day-container .date {
+  font-size: 210%;
+  font-weight: bold;
+}
+div.day-container .day {
+  font-size: 80%;
+  color: #999;
+  margin-left: 0.3em;
+}
+div.day-container div.time {
+  margin: 0px 10px 0px 0px;
+  padding: 4px 0px 2px 16px;
+  font-size: 100%;
+  font-weight: bold;
+  background-color: #EEE;
+  color: #333;
+}
+
+table.sequence {
+  margin-right: 10px;
+}
+
+/*
+ * box-link
+ */
+
+td.box-link-container {
+  height: 200px;
+  padding-right: 10px;
+  padding-top: 25px;
+}
+
+div.box-link {
+  margin-bottom: 10px;
+  width: 50px;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+
+div.box-link div.time-label {
+  color: #BBB;
+  font-size: 80%;
+  font-weight: bold;
+}
+
+div.box-link div.box-label {
+  color: #FFF;
+  font-size: 70%;
+  padding: 2px 0;
+  background-color: #000;
+  filter: alpha(opacity=80);
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+  width: 50px;
+  height: 1em;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0px;
+}
+
+div.box-link img {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+/*
+ * img-container
+ */
+
+div.pair {
+  background-color: #000;
+  border: 1px solid #EEE;
+}
+
+div.img-container {
+  width:  200px;
+  height: 160px;
+  text-align: center;
+}
+
+div.img-container img {
+  max-width: 200px;
+  max-height: 160px;
+}
+
+/*
+ * Timeline
+ */
+
+#timeline {
+  height: 50px;
+  border: 1px solid #000;
+  background-color: #000;
+}
+
+table.timeline td {
+  border: 2px solid #000;
+  background-color: #333;
+  padding-top: 4px;
+}
+table.timeline span.month {
+  margin-left: 0.2em;
+  font-size: 80%;
+  color: #999;
+}
+table.timeline span.date {
+  margin-left: 0.1em;
+  font-size: 100%;
+  color: #CCC;
+}
+table.timeline canvas {
+  margin-top: 4px;
+}

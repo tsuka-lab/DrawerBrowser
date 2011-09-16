@@ -1,0 +1,8 @@
+---
+timeout: 30
+log: log/thin.log
+environment: production
+servers: 1
+daemonize: true
+rackup: config.ru
+port: 3001
