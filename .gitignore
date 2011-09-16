@@ -1,6 +1,6 @@
-
-
-
+/log/*
+/tmp/*
+/vendor/bundle/*
 /public/drawer-images
 /Gemfile.lock
 .bundle
