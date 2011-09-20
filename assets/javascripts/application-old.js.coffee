@@ -170,8 +170,8 @@ class Day extends Backbone.Model
   setOtherBoxes: (boxList) ->
     @boxList = boxList
 
-  ## 同一日（同一id）のsequence
   getAllBoxSequenceList: ->
+    ## 同一日（同一id）のsequence
     sequenceList = new SequenceList()
     @boxList.each (box) =>
       day = box.getDates().get(@id)
@@ -189,15 +189,9 @@ class DateList extends Backbone.Collection
   addImage: (image) ->
     day = @get image.getDateString()
     unless day
-      date = new Date(
-        image.getDate().getFullYear(),
-        image.getDate().getMonth() - 1,
-        image.getDate().getDate(),
-      )
       day = new Day
         id:    image.getDateString()
-        #date:  image.getDate()
-        date: date
+        date:  image.getDate()
         boxId: image.getBoxId()
       @add day
     day.addImage image
@@ -258,53 +252,6 @@ class BoxList extends Backbone.Collection
       box = new Box({id: image.getBoxId()})
       @add box
     box.addImage image
-
-
-###
-# Drawer全体モード
-###
-
-class DrawerImage extends Image
-  ## TODO: 画像をリンクにする
-
-class DrawerImagePair extends ImagePair
-  ## 特に変更点は無いかも
-
-class DrawerImagePairList extends ImagePairList
-  ## ここも特に変更点は無いかも
-  model: DrawerImagePair
-
-class DrawerSequence extends Sequence
-  ## ここも必要ない？
-  initialize: ->
-    @imagePairs = new DrawerImagePairList()
-
-class DrawerSequenceList extends SequenceList
-  model: DrawerSequence
-
-class DrawerDay extends Day
-  initialize: ->
-    @sequenceList = new DrawerSequenceList()
-
-class DrawerDateList extends DateList
-  model: DrawerDay
-
-#
-# 棚全体（BoxListの機能も併せもつ）
-#
-class Drawer extends Box
-  defaults:
-    targetDate: null
-
-  initialize: ->
-    @dates = new DrawerDateList
-
-  setImageList: (imageList) ->
-    ## 先に各箱1日ごとに画像を分類
-    imageList.each (image) =>
-      @addImage image
-    ## さらにSequence単位で分類する
-    @classifySequence()
 
 class Timeline extends Backbone.Model
   setImageList: (imageList) ->
@@ -375,14 +322,13 @@ class SequenceView extends Backbone.View
     @render()
     $(window).unbind('scroll', @lazyRender)
 
-  makeLabel: ->
-    $('<div/>').addClass('time-label').text(
-      Util.dateToHoursMinString(@model.getDate())
-    )
-
   render: ->
     ## 時間表示
-    @makeLabel().appendTo(@el)
+    date = @model.getDate()
+    $('<div/>').addClass('time').text(
+      Util.dateToHoursMinString(date)
+    ).appendTo(@el)
+
     table = $('<table/>').addClass('sequence').appendTo(@el)
     tr = $('<tr/>').appendTo(table)
 
@@ -519,11 +465,12 @@ class DayView extends Backbone.View
     ).appendTo(div)
     div
 
-###
+
+#
 # 箱のView
-###
+# modelはBox
+#
 class BoxView extends Backbone.View
-  ## modelはBox
   tagName: 'table'
   className: 'box'
 
@@ -549,73 +496,14 @@ class BoxView extends Backbone.View
             win.scrollLeft() + 80
       win.scrollLeft(d)
 
-
-###
-# Drawer関係のView
-###
-
-class DrawerSequenceView extends SequenceView
-  makeLabel: ->
-    container = $('<div/>')
-    $('<div/>').addClass('time-label').text(
-      Util.dateToHoursMinString(@model.getDate())
-    ).appendTo(container)
-    boxLabel = $('<div/>').addClass('box-label').text(
-      BoxIdLabel[@model.get('boxId')]
-    ).appendTo(container)
-
-    boxLabel.click () =>
-      appRouter.navigate "box/#{@model.get('boxId')}/#{@model.get('id')}", true
-    container
-
-class DrawerDayView extends DayView
-  render: ->
-    time = @model.get('date').getTime().toString()
-    container = $('<div/>').attr({id: "day#{time}"}).addClass('day-container').appendTo(@el)
-    @makeDateElem().appendTo(container)
-    table = $('<table/>').addClass('sequences').appendTo(container)
-    tr = $('<tr/>').appendTo(table)
-    @model.getSequenceList().each (seq) =>
-      return if @shownSeqCount >= @max ## 1日に極端に画像が多いときは省略
-      seqView = new DrawerSequenceView({model: seq})
-      tr.append(seqView.el)
-      @shownSeqCount += 1
-
-class DrawerView extends Backbone.View
-  ## modelはDrawer
-  tagName: 'table'
-  className: 'box'
-  initialize: ->
-    @render()
-
-  render: ->
-    tr = $('<tr/>')
-    $(@el).html tr
-    ## Dayを描画
-    @max = 30 # 1日最大何件
-    @shownDaysCount = 0
-    @model.getDates().each (day) =>
-      return if @shownDaysCount >= @max
-      dayView = new DrawerDayView({model: day})
-      tr.append dayView.el
-      @shownDaysCount += 1
-    $(@el).mousewheel (event, delta) =>
-      win = $(window)
-      d = if delta > 0
-            win.scrollLeft() - 80
-          else
-            win.scrollLeft() + 80
-      win.scrollLeft(d)
-
-###
+#
 # Timeline
-###
-
+#
 class TimelineDateView extends Backbone.View
-  ## modelはDay
   tagName: 'td'
 
   initialize: ->
+    ## modelはDay
     @render()
 
   render: ->
@@ -643,8 +531,6 @@ class TimelineDateView extends Backbone.View
         strokeWidth: 1
         x1: x, y1: 0
         x2: x, y2: 20
-    canvas.click () =>
-      appRouter.navigate "all/#{@model.getDate().getTime().toString()}", true
 
 class TimelineView extends Backbone.View
   tagName: 'table'
@@ -658,6 +544,7 @@ class TimelineView extends Backbone.View
     @render()
 
   render: ->
+    #table = $('<table/>').addClass('timeline').appendTo(@el)
     tr = $('<tr/>').appendTo(@el)
     @model.getAllDateList().each (date) =>
       timelineDateView = new TimelineDateView({model: date})
@@ -686,38 +573,26 @@ class AppView extends Backbone.View
 
   targetSequenceId: null
 
-  initialize: (date, boxId, sequenceId) ->
-    @targetSequenceId = sequenceId if sequenceId? ## TODO: これはBoxListに移すべきかも
-    @imageList = new ImageList()
-    @imageList.bind 'reset', () =>
+  initialize: (boxId, sequenceId) ->
+    ## 読み込んで最初のBoxViewを表示
+    @targetSequenceId = sequenceId if sequenceId?
+    imageList = new ImageList()
+    imageList.bind 'reset', () =>
       @boxList = new BoxList()
-      @boxList.setImageList(@imageList)
-      @drawer = new Drawer({targetDate: date})
-      @drawer.setImageList(@imageList)
-      @initTimeline()
-      @change(date, boxId, sequenceId)
-    @imageList.fetch()
+      @boxList.setImageList(imageList)
+      @boxList.setCurrentBoxId(boxId)
 
-  render: ->
+      ## 全体タイムライン用
+      @timeline = new Timeline()
+      @timeline.setImageList(imageList)
+      @renderTimeline()
+
+      @render()
+    imageList.fetch()
+
+  render: =>
     @el.empty()
-    if @boxList.getCurrentBox()?
-      @renderBoxes()
-    else
-      @renderDrawer()
     @renderTabs()
-
-  renderDrawer: (imageList) =>
-    $(window).scrollLeft(0) ## 一度左に戻す
-    drawerView = new DrawerView({ model: @drawer })
-    @el.html drawerView.el
-    if @drawer.get('targetDate')
-      targetDayView = $('#day' + @drawer.get('targetDate').getTime())
-      if targetDayView.length
-        setTimeout(() =>
-          $(window).scrollLeft(targetDayView.offset().left - 10)
-        , 300)
-
-  renderBoxes: =>
     $(window).scrollLeft(0) ## 一度左に戻す
     boxView = new BoxView({ model: @boxList.getCurrentBox() })
     @el.html boxView.el
@@ -726,38 +601,27 @@ class AppView extends Backbone.View
       if seq.length
         setTimeout(() =>
           $(window).scrollLeft(seq.offset().left - 10)
+          #$("html,body").animate({scrollLeft: seq.offset().left - 10}, 300);
         , 500)
-
-  initTimeline: () =>
-    ## 全体タイムライン用
-    @timeline = new Timeline()
-    @timeline.setImageList(@imageList)
-    $('#timeline').append( new TimelineView({model: @timeline}).el )
 
   renderTabs: =>
     tabs = $('#tabs')
     tabs.empty()
     @boxList.each (box) =>
       tab = $('<div/>').addClass('tab').appendTo(tabs)
-      if (@boxList.getCurrentBox()? and
-          @boxList.getCurrentBox().id == box.id)
+      if (@boxList.getCurrentBox().id == box.id)
         tab.addClass('selected').text(BoxIdLabel[box.id])
       else
         tab.text(BoxIdLabel[box.id]).click () =>
           appRouter.navigate "box/#{box.id}", true
 
-  reset: ->
-    @boxList.setCurrentBoxId(null)
-    @drawer.set({targetDate: null})
-
-  change: (date, boxId, sequenceId) =>
-    @reset()
-    if date?
-      @drawer.set({targetDate: date})
-    else
-      @boxList.setCurrentBoxId(boxId)
-      @targetSequenceId = sequenceId if sequenceId?
+  switchBox: (boxId, sequenceId) =>
+    @boxList.setCurrentBoxId(boxId)
+    @targetSequenceId = sequenceId if sequenceId?
     @render()
+
+  renderTimeline: =>
+    $('#timeline').append( new TimelineView({model: @timeline}).el )
 
 #
 # メインコントローラ
@@ -765,27 +629,17 @@ class AppView extends Backbone.View
 class AppRouter extends Backbone.Router
   routes:
     '': 'index'
-    'all': 'all'
-    'all/:time': 'all'
     'box/:boxId': 'box'
     'box/:boxId/:sequenceId': 'box'
 
   index: ->
-    @navigate "all"
-
-  all: (time) ->
-    date = new Date()
-    date.setTime(time) if time?
-    @change(date, null, null)
+    @navigate "box/01"
 
   box: (boxId, sequenceId) ->
-    @change(null, boxId, sequenceId)
-
-  change: (date, boxId, sequenceId) ->
     if AppRouter.appView
-      AppRouter.appView.change(date, boxId, sequenceId)
+      AppRouter.appView.switchBox(boxId, sequenceId)
     else
-      AppRouter.appView = new AppView(date, boxId, sequenceId)
+      AppRouter.appView = new AppView(boxId, sequenceId)
 
   @appView: null
 

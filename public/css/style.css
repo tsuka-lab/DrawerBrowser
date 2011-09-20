@@ -30,6 +30,8 @@ table {
   top: 0;
   width: 100%;
   height: 110px;
+
+  box-shadow: 0px -1px 10px #000000 inset;
 }
 
 div#tabs {
@@ -51,6 +53,11 @@ div#tabs div.tab {
 div#tabs div.selected {
   background-color: black;
   color: white;
+
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
 }
 
 /*
@@ -93,13 +100,22 @@ div.day-container .day {
   color: #999;
   margin-left: 0.3em;
 }
-div.day-container div.time {
+div.day-container div.time-label {
   margin: 0px 10px 0px 0px;
   padding: 4px 0px 2px 16px;
   font-size: 100%;
   font-weight: bold;
   background-color: #EEE;
   color: #333;
+}
+div.day-container div.box-label {
+  margin: 0px 10px 0px 0px;
+  padding: 4px 0px 4px 16px;
+  font-size: 100%;
+  background-color: #EEE;
+  color: #333;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 td.sequence-container {
@@ -129,8 +145,11 @@ div.box-link {
 }
 
 div.box-link div.time-label {
+  background-color: black;
+  margin: 0;
+  padding: 0;
   color: #BBB;
-  font-size: 80%;
+  font-size: 12px;
   font-weight: bold;
 }
 
@@ -182,12 +201,16 @@ div.img-container img {
   height: 50px;
   border: 1px solid #000;
   background-color: #000;
+  -moz-box-shadow: 0px 1px 10px #000;
+  -webkit-box-shadow: 0px 1px 10px #000;
+  box-shadow: 0px 1px 10px #000;
 }
 
 table.timeline td {
   border: 2px solid #000;
   background-color: #333;
   padding-top: 4px;
+  cursor: pointer;
 }
 table.timeline span.month {
   margin-left: 0.2em;
