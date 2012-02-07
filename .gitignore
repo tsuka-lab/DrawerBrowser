@@ -4,5 +4,6 @@
 /public/drawer-images
 /Gemfile.lock
 .bundle
+environment.rb
 *.db
 *.sqlite3

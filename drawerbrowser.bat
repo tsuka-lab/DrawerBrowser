@@ -1,2 +1,2 @@
-thin -e production start
+bundle exec thin -e production start
 pause
