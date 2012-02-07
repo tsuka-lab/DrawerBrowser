@@ -36,7 +36,9 @@ Modify "Gemfile" when you install on Windows.
 
 ## Settings
 
-environment.rb
+    $ cp environment.rb.example environment.rb
+
+Edit environment.rb
 
     set :drawer_image_dir, "PATH/TO/IMAGES"
 
