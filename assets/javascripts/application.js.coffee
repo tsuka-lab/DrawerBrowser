@@ -191,7 +191,7 @@ class DateList extends Backbone.Collection
     unless day
       date = new Date(
         image.getDate().getFullYear(),
-        image.getDate().getMonth() - 1,
+        image.getDate().getMonth(),
         image.getDate().getDate(),
       )
       day = new Day
@@ -360,8 +360,10 @@ class SequenceView extends Backbone.View
 
   initialize: ->
     $(@el).attr('id', "sequence#{ @model.get('id') }").addClass('sequence-container')
+    @prevScrollLeft = null
     setTimeout(() =>
-      $(window).bind('scroll', @lazyRender).triggerHandler('scroll')
+      $(window).bind('scroll', @lazyRender)
+      @lazyRender()
     , 300)
 
   isDisplayedInnerWindow: (elem) ->
@@ -370,7 +372,17 @@ class SequenceView extends Backbone.View
     winRight = winLeft + $(window).width()
     (winLeft-100 <= elemLeft <= winRight+100)
 
+  isScroll: () ->
+    ## fox firefox scroll
+    scrollLeft = $(window).scrollLeft()
+    if scrollLeft is @prevScrollLeft
+      false
+    else
+      @prevScrollLeft = scrollLeft
+      true
+
   lazyRender: () =>
+    return unless @isScroll()
     return unless @isDisplayedInnerWindow(@el)
     @render()
     $(window).unbind('scroll', @lazyRender)
@@ -506,7 +518,7 @@ class DayView extends Backbone.View
     div = $('<div/>').addClass('date-label')
     
     $('<div/>').addClass('month').text(
-      Util.months[date.getMonth()]
+      Util.months[date.getMonth() + 1]
     ).appendTo(div)
     $('<span/>').addClass('date').text(
       date.getDate()

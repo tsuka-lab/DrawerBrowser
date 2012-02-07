@@ -1,6 +1,6 @@
 configure do
   set :site_title, 'DrawerBrowser'
-  set :drawer_images_dir, '/home/kambara/Desktop/drawer-images'
+  set :drawer_images_dir, '/home/kambara/work/2011/201109/drawer-images'
 
   set :haml, {:format => :html5}
   set :views, File.dirname(__FILE__) + '/app/views'

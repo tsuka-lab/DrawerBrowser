@@ -52,12 +52,12 @@ Rackup:
 
 Thin:
 
-    $ thin start
+    $ bundle exec thin start
 
 Thin (production):
 
-    $ thin start -C thin.yaml
-    $ thin stop  -C thin.yaml
+    $ bundle exec thin start -C thin.yaml
+    $ bundle exec thin stop  -C thin.yaml
 
 ## Reference
 
