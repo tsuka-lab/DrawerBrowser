@@ -56,6 +56,8 @@ Thin:
 
 Thin (production):
 
+    $ bundle exec thin -e production start
+
     $ bundle exec thin start -C thin.yaml
     $ bundle exec thin stop  -C thin.yaml
 
